@@ -82,7 +82,18 @@ const PaymentPage = ({ username }) => {
 
             if (paymentsRes.ok) {
                 const dbpayments = await paymentsRes.json()
-                setPayments(dbpayments)
+
+                console.log("Payments API response:", dbpayments)
+
+                // Make sure payments is always an array
+                if (Array.isArray(dbpayments)) {
+                    setPayments(dbpayments)
+                } else if (Array.isArray(dbpayments.payments)) {
+                    setPayments(dbpayments.payments)
+                } else {
+                    console.error("Payments API did not return an array:", dbpayments)
+                    setPayments([])
+                }
             } else {
                 const errorBody = await paymentsRes.text()
                 console.error('Payments fetch failed', paymentsRes.status, errorBody)

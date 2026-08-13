@@ -65,21 +65,46 @@ export const fetchpayments = async (username) => {
 export const updateProfile = async (username, data) => {
   try {
     if (!username) {
-      console.error('updateProfile called without username', { data })
+      console.error("updateProfile called without username")
       return null
     }
+
     await connectDB()
-    const payload = data instanceof FormData ? Object.fromEntries(data) : data
-    const update = { ...payload, updatedAt: new Date() }
-    
-    const updated = await User.findOneAndUpdate({ username }, update, { new: true })
+
+    const payload =
+      data instanceof FormData
+        ? Object.fromEntries(data)
+        : data
+
+    const update = {
+      name: payload.name || "",
+      email: payload.email || "",
+      username: payload.username || "",
+      profilepic: payload.profilepic || "",
+      coverpic: payload.coverpic || "",
+      razorpayid: payload.razorpayid || "",
+      updatedAt: new Date(),
+    }
+
+    const updated = await User.findOneAndUpdate(
+      { username },
+      update,
+      { returnDocument: "after" }
+    ).lean()
+
     if (!updated) {
-      console.error('updateProfile: no user found for', username)
+      console.error("updateProfile: no user found for", username)
       return null
     }
-    return updated ? updated.toObject() : null
+
+    return {
+      ...updated,
+      _id: updated._id?.toString(),
+      createdAt: updated.createdAt?.toISOString(),
+      updatedAt: updated.updatedAt?.toISOString(),
+    }
   } catch (err) {
-    console.error('updateProfile error for', username, err)
+    console.error("updateProfile error for", username, err)
     throw err
   }
 }

@@ -1,77 +1,76 @@
-import NextAuth from 'next-auth'
-// import AppleProvider from 'next-auth/providers/apple'
-// import FacebookProvider from 'next-auth/providers/facebook'
-// import GoogleProvider from 'next-auth/providers/google'
-// import EmailProvider from 'next-auth/providers/email'
-import GitHubProvider from "next-auth/providers/github";
-import mongoose from "mongoose";
-import User from '@/models/User';
-import Payment from '@/models/Payment';
-import connectDB from '@/db/connectDb';
+import NextAuth from "next-auth"
+import GitHubProvider from "next-auth/providers/github"
+import User from "@/models/User"
+import connectDB from "@/db/connectDb"
 
 export const authoptions = NextAuth({
   providers: [
-    // OAuth authentication providers...
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
+      clientSecret: process.env.GITHUB_SECRET,
     }),
-    // AppleProvider({
-    //   clientId: process.env.APPLE_ID,
-    //   clientSecret: process.env.APPLE_SECRET
-    // }),
-    // FacebookProvider({
-    //   clientId: process.env.FACEBOOK_ID,
-    //   clientSecret: process.env.FACEBOOK_SECRET
-    // }),
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_ID,
-    //   clientSecret: process.env.GOOGLE_SECRET
-    // }),
-    // // Passwordless / email sign in
-    // EmailProvider({
-    //   server: process.env.MAIL_SERVER,
-    //   from: 'NextAuth.js <no-reply@example.com>'
-    // }),
   ],
 
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      if (account.provider == "github") {
-        // Get email from user or profile
-        const userEmail = user?.email || profile?.email
-        if (!userEmail) {
-          return false
-        }
-
-        try {
-          // Connect to the database
-          await mongoose.connect("mongodb://localhost:27017/chai")
-          // Check if the user already exists in the database
-          const currentUser = await User.findOne({ email: userEmail })
-          if (!currentUser) {
-            // Create a new user
-            const newUser = new User({
-              email: userEmail,
-              name: profile?.name || user?.name,
-              username: profile?.login || userEmail.split("@")[0],
-            })
-            await newUser.save()
-            user.name = newUser.username
-          }
-          else {
-            user.name = currentUser.username
-          }
-        } catch (error) {
-          console.error("Error in signIn callback:", error)
-          return false
-        }
+    async signIn({ user, account, profile }) {
+      if (account?.provider !== "github") {
         return true
       }
-      return true
-    }
-  }
 
+      const userEmail = user?.email || profile?.email
+
+      if (!userEmail) {
+        console.error("GitHub did not provide an email")
+        return false
+      }
+
+      try {
+        await connectDB()
+
+        console.log("Checking user:", userEmail)
+
+        let currentUser = await User.findOne({
+          email: userEmail,
+        })
+
+        if (!currentUser) {
+          const username =
+            profile?.login ||
+            userEmail.split("@")[0]
+
+          currentUser = await User.create({
+            email: userEmail,
+            name: profile?.name || user?.name || "",
+            username: username,
+            profilepic: user?.image || "",
+            coverpic: "",
+            razorpayid: "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          })
+
+          console.log("NEW USER CREATED:", currentUser.username)
+        } else {
+          console.log(
+            "EXISTING USER:",
+            currentUser.username
+          )
+        }
+
+        // Make username available to NextAuth session
+        user.name = currentUser.username
+
+        return true
+      } catch (error) {
+        console.error(
+          "Error in signIn callback:",
+          error
+        )
+
+        return false
+      }
+    },
+  },
 })
 
 export { authoptions as GET, authoptions as POST }
