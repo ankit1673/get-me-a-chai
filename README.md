@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 Get Me a Chai
 
-## Getting Started
+> A full-stack creator-support platform where creators can build a public profile and receive financial support from their audience through a simple username-based experience.
 
-First, run the development server:
+**Get Me a Chai** is a full-stack web application built with **Next.js, React, MongoDB, Mongoose, NextAuth, GitHub OAuth, Razorpay, and Tailwind CSS**. The project demonstrates how a real-world product can connect authentication, user profiles, database persistence, server-side operations, payment processing, API routes, and cloud deployment into a single application.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Mongoose](https://img.shields.io/badge/Mongoose-ODM-880000?logo=mongoose&logoColor=white)](https://mongoosejs.com/)
+[![Razorpay](https://img.shields.io/badge/Razorpay-Payments-3395FF)](https://razorpay.com/)
+[![NextAuth](https://img.shields.io/badge/NextAuth-Authentication-black)](https://next-auth.js.org/)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://vercel.com/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🌐 Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🔗 Live Application
 
-## Learn More
+https://get-me-a-chai-five.vercel.app
 
-To learn more about Next.js, take a look at the following resources:
+### 💻 GitHub Repository
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+https://github.com/ankit1673/get-me-a-chai
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 👨‍💻 Developer
 
-## Deploy on Vercel
+**Ankit Kumar Tiwari**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- GitHub: https://github.com/ankit1673
+- Portfolio: https://ankit1673.github.io/ankit-portfolio/
+- LinkedIn: https://www.linkedin.com/in/ankit-kumar-tiwari-130a42303/
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+# ✨ Why I Built This
+
+Many creators need a simple way to let their audience support them financially without building an entire crowdfunding infrastructure themselves.
+
+I built **Get Me a Chai** to explore how a real-world full-stack product can connect:
+
+- Authentication
+- User profiles
+- Dynamic public pages
+- Database persistence
+- Server-side business logic
+- Payment processing
+- API routes
+- Third-party OAuth
+- Cloud deployment
+
+Rather than building only a static frontend, the project focuses on the complete application lifecycle:
+
+**Authentication → Database → Business Logic → Payment → Persistence → Deployment**
+
+This project helped me work with the boundaries between client-side React components, Next.js server functionality, MongoDB/Mongoose, external authentication, and payment services.
+
+---
+
+# 🎯 Key Features
+
+## 🔐 GitHub Authentication
+
+Users can authenticate using GitHub OAuth through NextAuth.
+
+The authentication flow checks whether a GitHub user already exists and creates a corresponding application user when necessary.
+
+---
+
+## 👤 Creator Profiles
+
+Authenticated users can maintain their creator profile with information such as:
+
+- Name
+- Email
+- Username
+- Profile picture
+- Cover picture
+- Razorpay configuration
+
+Profile information is persisted in MongoDB.
+
+---
+
+## 🔗 Username-Based Public Profiles
+
+Every creator gets a public page based on their username.
+
+Example:
+
+```text
+https://get-me-a-chai-five.vercel.app/ankit1673
